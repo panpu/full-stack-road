@@ -1,0 +1,5 @@
+# 问题记录
+## 为什么gitHub提交记录显示作者名称是unknow?
+原因就是本地 commit时的作者名称是unknow，所以提交到gitHub上也是unknow
+## 解决
+git config --global user.name "你的名字"
