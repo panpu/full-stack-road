@@ -10,3 +10,18 @@ git config --global user.name "你的名字"
 git config --local credential.helper store
 保存git全局账号
 git config --global credential.helper store
+## git 无法添加文件夹下文件
+google后发现可能是该子文件夹下有.git文件夹导致无法上传。
+### 解决
+删除子文件夹下.git后，依然无法提交子文件夹下的文件。
+尝试以下方法：
+```bash
+ git rm --cached directory
+ git add directory
+```
+注：directory为子文件夹的路径。
+但是执行git rm --cached directory时，提示
+```bash
+fatal: Unable to create 'xx/.git/index.lock': File exists.
+```
+执行rm -f xx/.git/index.lock后解决
