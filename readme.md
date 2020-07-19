@@ -1,5 +1,5 @@
 # 全栈之路
 2020/07/17
 ## server为项目文件目录
-## question为项目问题收集目录
+## gitAboutQuestion为项目GIT问题收集目录
 
