@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "update":"git add . && git commit -m"
+  },
   "dependencies": {
     "@nestjs/cli": "^7.4.1"
   }
