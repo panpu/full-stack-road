@@ -31,3 +31,18 @@ google后发现可能是该子文件夹下有.git文件夹导致无法上传。
 fatal: Unable to create 'xx/.git/index.lock': File exists.
 ```
 执行```bashrm -f xx/.git/index.lock```后解决
+
+## git 如何回退版本
+代码提交有误，需要回退版本，如何进行回退？
+
+### 解决
+```
+$ git log  //查看日志，寻找需要回退的版本
+$ git reset --hard HEAD^ 回退到上个版本
+$ git reset --hard HEAD~3 回退到前3次提交之前，以此类推，回退到n次提交之前
+$ git reset --hard commit_id 回退/进到某个commit
+回退后需要 $ git push -f 强退提交代码，风险较大，不推荐使用
+$ git revert -n 版本号 //反做，并使用“git commit -m 版本名”提交：
+```
+*原理： git revert是用于“反做”某一个版本，以达到撤销该版本的修改的目的。比如，我们commit了三个版本（版本一、版本二、 版本三），突然发现版本二不行（如：有bug），想要撤销版本二，但又不想影响撤销版本三的提交，就可以用 git revert 命令来反做版本二，生成新的版本四，这个版本四里会保留版本三的东西，但撤销了版本二的东西。*
+### 注意： 这里可能会出现冲突，那么需要手动修改冲突的文件。而且要git add 文件名。 ###
