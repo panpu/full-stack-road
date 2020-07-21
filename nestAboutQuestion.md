@@ -128,3 +128,16 @@ const models = TypegooseModule.forFeature([User])//注册模块
 })
 export class DbModule {}
 ```
+## controller中的2种注入
+```
+export class UserController {
+    // 注入User模型
+    constructor(@InjectModel(User) private readonly model){}
+    //将news.serbice中注入的属性，在这里注册就可以在this上使用
+    constructor(private readonly UserService : UserService){}
+    @Get('search')
+    async findAll(@Response() res){
+        await this.UserService.findAll(res);
+    }
+}
+```
