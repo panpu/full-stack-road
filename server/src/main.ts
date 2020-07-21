@@ -1,9 +1,16 @@
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 import { SwaggerModule , DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.useStaticAssets(join(__dirname, '..', 'public'));//配置静态资源
+  //  或者
+  //  app.useStaticAssets('public',{
+  //    prefix:'/static/'   //配置虚拟目录 上面一样
+  //  })
   const options = new DocumentBuilder()
   .setTitle('nest入门接口标题')
   .setDescription('使用nest书写的常用性接口') // 文档介绍

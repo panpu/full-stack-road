@@ -62,3 +62,69 @@ export class NewsService {
     }
 }
 ```
+## 创建公用库（存放类似db之类）
+```
+//创建一个db公用库
+nest g lib db
+//默认是@app， 最好改成@libs方便记忆
+? What prefix would you like to use for the library (default: @app)? @libs
+```
+### 安装完成后在需要使用的模块的app.module.ts中引入dbmodule
+```
+import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { DbModule } from '@libs/db';
+
+@Module({
+  imports: [
+    DbModule
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
+```
+### 在lib文件下的src下的db.module.ts中连接数据库
+```
+import { Module } from '@nestjs/common';
+import { DbService } from './db.service';
+import { TypegooseModule } from "nestjs-typegoose"
+
+@Module({
+  imports:[
+    TypegooseModule.forRoot("mongodb://localhost:27017/nest-MDemo",{
+      useNewUrlParser:true,
+      useUnifiedTopology: true,
+    	useCreateIndex: true,
+    	useFindAndModify: false
+    })
+  ],
+  providers: [DbService],
+  exports: [DbService],
+})
+export class DbModule {}
+```
+### 注册模块(可以在需要的模块中注册，也可以这样全局注册，就可以任意使用)
+```
+import { Module, Global } from '@nestjs/common';
+import { DbService } from './db.service';
+import { TypegooseModule } from "nestjs-typegoose"
+import { User } from './models/user.model';
+const models = TypegooseModule.forFeature([User])//注册模块
+@Global()//定义为全局
+@Module({
+  imports:[
+    TypegooseModule.forRoot("mongodb://localhost:27017/nest-MDemo",{
+      useNewUrlParser:true,
+      useUnifiedTopology: true,
+    	useCreateIndex: true,
+    	useFindAndModify: true
+    }),
+    models
+  ],
+  providers: [DbService],
+  exports: [DbService,models],
+})
+export class DbModule {}
+```
