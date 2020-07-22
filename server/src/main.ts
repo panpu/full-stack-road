@@ -3,6 +3,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { SwaggerModule , DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -19,6 +20,7 @@ async function bootstrap() {
   // .setBasePath('http://localhost:5000')
   .build();
   const document = SwaggerModule.createDocument(app,options);
+  app.useGlobalPipes(new ValidationPipe()) //开启一个全局验证管道
   SwaggerModule.setup('swagger',app,document)
   await app.listen(3000);
   console.log(`项目已启动，请访问：http://localhost:3000`)

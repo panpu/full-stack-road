@@ -141,3 +141,78 @@ export class UserController {
     }
 }
 ```
+## 使用class-validator数据验证
+### 安装
+```
+npm i --save class-validator class-transformer
+class-validator 用于入的数据验证
+class-transformer 用于数据格式的转换
+```
+### 开启
+使用 在main.js 开启一个全局管道 其他验证api查看
+```
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.useGlobalPipes(new ValidationPipe()) //开启一个全局验证管道
+  await app.listen(3000);
+}
+bootstrap();
+```
+### 使用
+```
+import {IsNotEmpty} from 'class-validator'
+// 这里不使用interface 原因是 interface编译成js后会被删除，同时用不了装饰器，无法在swagger显示
+class CreatePostDto{ //用于对参数的限制
+  @IsNotEmpty({message:'数据不为空'})//如果为空返回400
+  title:string
+   @IsNotEmpty({message:'数据不为空'})
+  content:string
+}
+```
+### 结果
+```
+Request body
+{
+  "name": "潘璞",
+  "age": 23,
+}
+Response body
+{
+  "statusCode": 400,
+  "message": [
+    "缺少参数"
+  ],
+  "error": "Bad Request"
+}
+```
+## 使用注解设置接口传参
+新增一个接口
+```
+import { Param } from '@nestjs/common';
+import { UserService } from './user.service';
+import { User} from '@libs/db/modules/user.module';
+@ApiTags('新增用户')
+@Post('/creatUser')
+async creatUser(@Response() res,@Body() param:User){
+    await this.UserService.creatUser(res,param);
+}
+```
+### Request body*required
+#### Example Value | Schema
+```
+{
+  "password": "123456",
+  "uuid": "12345678",
+  "name": "潘璞",
+  "age": 23,
+  "nickname": "管理员",
+  "sex": "男",
+  "job": "前端工程师",
+  "workyear": 3,
+  "headsculpture": "./head-sculpture/uuid.jpg"
+}
+```
