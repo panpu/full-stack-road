@@ -3,6 +3,6 @@
     "update":"git add . && git commit -m"
   },
   "dependencies": {
-    "@nestjs/cli": "^7.4.1"
+    "@nestjs/cli": "^9.1.8"
   }
 }
